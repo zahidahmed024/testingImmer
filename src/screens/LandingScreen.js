@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View, ScrollView, Text, Button, TextInput } from 'react-native'
 import axios from 'axios';
 import { get, post } from '../api/apicaller'
-import { fetchPosts, addPost } from '../store/postStore'
+import { fetchPosts, addPost, update, deletePost } from '../store/postStore'
 import { useSelector, useDispatch } from 'react-redux'
 
 export default function LandingScreen({ navigation }) {
@@ -11,6 +11,8 @@ export default function LandingScreen({ navigation }) {
     // const [posts, setPosts] = useState([]);
 
     const [addText, setText] = useState('');
+    const [editText, setEditText] = useState('');
+    const [item, setItem] = useState(null);
     const dispatch = useDispatch()
     const posts = useSelector(state => state.posts.posts)
 
@@ -18,10 +20,11 @@ export default function LandingScreen({ navigation }) {
         console.log('rendered')
         const getPosts = async () => {
             return await dispatch(fetchPosts())
+
         }
         getPosts()
     }, [dispatch])
-  
+
 
     return (
         // console.log('rendered')
@@ -42,7 +45,8 @@ export default function LandingScreen({ navigation }) {
                 onPress={fetchPosts}
             /> */}
             <Button
-                title="add todo"
+                title="add post"
+                color="green"
                 onPress={() => dispatch(addPost(
                     {
                         title: addText,
@@ -52,13 +56,60 @@ export default function LandingScreen({ navigation }) {
                 ))}
             />
 
+            {item !== null &&
+                <>
+                    <TextInput
+                        value={editText}
+                        style={{ borderWidth: 1, borderColor: 'black', margin: 10 }}
+                        placeholder={'input title'}
+                        onChangeText={(text) => {
+                            setEditText(text)
+                        }
+                        }
+                    />
+                    <Button
+                        title="update post"
+                        color="black"
+                        onPress={() => {
+                            // alert('halllo')
+                            dispatch(update(
+                                { ...item, title: editText }
+                            ))
+                            setItem(null)
+                        }}
+                    />
+                </>
+
+            }
+
             {
-                posts.map(item => {
-                    return <Text
-                        style={{ borderWidth: 1, borderColor: 'red', margin: 10 }}
-                        key={item.id}>
-                        {item.title}
-                    </Text>
+                posts.map((item, index) => {
+                    return <View style={{ flexDirection: 'row', margin: 5 }}>
+                        <Text
+                            style={{ width: '60%', borderWidth: 1, borderColor: 'red', margin: 10 }}
+                            key={item.id}>
+                            {item.title}
+                        </Text>
+                        <Button
+                            title={'edit'}
+                            color="blue"
+                            onPress={() => {
+                                // alert('hallo')
+                                setItem(item)
+                                setEditText(item.title)
+                            }
+                            }
+                        />
+                        <Button
+                            title={'delete'}
+                            color="red"
+                            onPress={() => {
+                                dispatch(
+                                    deletePost(item)
+                                )
+                            }}
+                        />
+                    </View>
                 })
             }
 

@@ -1,5 +1,5 @@
-import { get, post } from '../api/apicaller'
-import { result, add } from 'lodash';
+import { get, post, put, del } from '../api/apicaller'
+import { findIndex } from 'lodash';
 import { produce } from 'immer'
 import _ from 'lodash'
 const ADD = 'ADD';
@@ -14,7 +14,7 @@ const FETCH = 'fetch';
 export const fetchPosts = () => async (dispatch) => {
   try {
     let response = await get('posts')
-    let result = _.reverse(response.data)
+    let result = response.data.splice(0, 5)
     console.log(result)
     dispatch({
       type: FETCH,
@@ -34,6 +34,35 @@ export const addPost = (data) => async (dispatch) => {
     })
   } catch (error) {
     alert(error)
+  }
+};
+
+export const update = (data) => async (dispatch) => {
+  // console.log(`posts/${data.id}${JSON.stringify(data)}`)
+  try {
+    let response = await put(`posts/${data.id}`, data)
+    console.log('response', response)
+    dispatch({
+      type: UPDATE,
+      payload: response.data
+    })
+  } catch (error) {
+    alert(error)
+
+  }
+};
+export const deletePost = (data) => async (dispatch) => {
+  // console.log(data)
+  try {
+    let response = await del(`posts/${data.id}`)
+    console.log('response', response)
+    dispatch({
+      type: DELETE,
+      payload: data.id
+    })
+  } catch (error) {
+    alert(error)
+
   }
 };
 
@@ -57,14 +86,15 @@ export default immerReducer = produce((draft = initialState, action) => {
       draft.posts.push(payload);
       return draft;
     }
-    case DELETE: {
-      const { index } = payload;
-      draft.splice(index, 1);
+    case UPDATE: {
+      console.log(draft)
+      let itemIndex = draft.posts.findIndex(item => item.id == payload.id)
+      draft.posts[itemIndex].title = payload.title;
       return draft;
     }
-    case UPDATE: {
-      const { index, value } = payload;
-      draft[index] = value;
+    case DELETE: {
+      let itemIndex = draft.posts.findIndex(item => item.id == payload)
+      draft.posts.splice(itemIndex, 1);
       return draft;
     }
     default: {
