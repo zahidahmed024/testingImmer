@@ -1,7 +1,7 @@
 import { get, post, put, del } from '../api/apicaller'
-import { findIndex } from 'lodash';
 import { produce } from 'immer'
-import _ from 'lodash'
+
+
 const ADD = 'ADD';
 const DELETE = 'DELETE';
 const UPDATE = 'UPDATE';
@@ -21,7 +21,7 @@ export const fetchPosts = () => async (dispatch) => {
       payload: result
     })
   } catch (error) {
-    alert(error)
+    console.log('----action',error)
   }
 };
 export const addPost = (data) => async (dispatch) => {
@@ -33,7 +33,7 @@ export const addPost = (data) => async (dispatch) => {
       payload: response.data
     })
   } catch (error) {
-    alert(error)
+    console.log('----action',error)
   }
 };
 
@@ -47,7 +47,7 @@ export const update = (data) => async (dispatch) => {
       payload: response.data
     })
   } catch (error) {
-    alert(error)
+    console.log('----action',error)
 
   }
 };
@@ -61,7 +61,7 @@ export const deletePost = (data) => async (dispatch) => {
       payload: data.id
     })
   } catch (error) {
-    alert(error)
+    console.log('----action',error)
 
   }
 };

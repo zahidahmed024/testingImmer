@@ -4,6 +4,7 @@ import axios from 'axios';
 import { get, post } from '../api/apicaller'
 import { fetchPosts, addPost, update, deletePost } from '../store/postStore'
 import { useSelector, useDispatch } from 'react-redux'
+import CustomAlert from '../navigation/CustomAlert';
 
 export default function LandingScreen({ navigation }) {
     // const postStore = useStoreState((state) => console.log(state));
@@ -16,26 +17,50 @@ export default function LandingScreen({ navigation }) {
     const dispatch = useDispatch()
     const posts = useSelector(state => state.posts.posts)
 
-    useEffect(() => {
-        console.log('rendered')
-        const getPosts = async () => {
-            return await dispatch(fetchPosts())
-
-        }
-        getPosts()
-    }, [dispatch])
-
+    // useEffect(() => {
+    //     console.log('rendered')
+    //     const getPosts = async () => {
+    //         return await dispatch(fetchPosts())
+    //     }
+    //     getPosts()
+    // }, [dispatch])
+    const getPosts = async () => {
+        return dispatch(fetchPosts())
+    }
 
     return (
         // console.log('rendered')
         <ScrollView>
 
             <Button
-                title="next page"
+                title="alert show"
+                onPress={() => {
+                    // new CustomAlert()
+                    //  console.log( CustomAlert.show())
+                    CustomAlert.show('I have a message for you! asdasd asd asd as das dasd asd asd asd asd asd asd asd asd asd ', () => alert('hoise'), () => CustomAlert.hide())
+                }}
+            />
+            <Button
+                title="CameraTest"
+                onPress={() => navigation.navigate('CameraTest')}
+            />
+            <Button
+                title="fetch posts"
+                onPress={getPosts}
+            />
+
+            <Button
+                title="LoginScreen"
                 onPress={() => navigation.navigate('LoginScreen')}
+            />
+
+            <Button
+                title="SetState"
+                onPress={() => navigation.navigate('SetState')}
             />
             <Text>{addText}</Text>
             <TextInput
+                value={addText}
                 style={{ borderWidth: 1, borderColor: 'black', margin: 10 }}
                 placeholder={'input title'}
                 onChangeText={(text) => setText(text)}
@@ -47,13 +72,17 @@ export default function LandingScreen({ navigation }) {
             <Button
                 title="add post"
                 color="green"
-                onPress={() => dispatch(addPost(
-                    {
-                        title: addText,
-                        body: 'ahmed 024',
-                        userId: Math.random(),
-                    }
-                ))}
+                onPress={() => {
+                    dispatch(addPost(
+                        {
+                            title: addText,
+                            body: 'ahmed 024',
+                            userId: Math.random(),
+                        }
+                    ))
+                    setText('')
+                }
+                }
             />
 
             {item !== null &&
@@ -84,10 +113,10 @@ export default function LandingScreen({ navigation }) {
 
             {
                 posts.map((item, index) => {
-                    return <View style={{ flexDirection: 'row', margin: 5 }}>
+                    return <View key={item.id} style={{ flexDirection: 'row', margin: 5 }}>
                         <Text
                             style={{ width: '60%', borderWidth: 1, borderColor: 'red', margin: 10 }}
-                            key={item.id}>
+                        >
                             {item.title}
                         </Text>
                         <Button
