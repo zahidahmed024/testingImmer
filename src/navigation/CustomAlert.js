@@ -2,66 +2,37 @@ import React, { Component } from 'react'
 import { Text, View } from 'react-native'
 import AwesomeAlert from 'react-native-awesome-alerts';
 export default class CustomAlert extends Component {
-    static myComponentInstance
+
     constructor(props) {
         super(props)
 
         this.state = {
             visible: false,
             text: "",
-            onPressOk: () => { },
-            onPressCancel: () => { },
+            callfunction: () => { }
         }
-        CustomAlert.myComponentInstance = this
-
     }
-    componentWillMount() {
-        console.log('mount',)
-        this._hide()
+    show = () => {
+        this.setState({ visible: true })
     }
-
-    static show(text, onPressOk, onPressCancel) {
-        console.log('pressed')
-        setTimeout(() => {
-            CustomAlert.myComponentInstance._show(text, onPressOk, onPressCancel)
-        }, 100);
+    hide = () => {
+        this.setState({ visible: false })
+        // alert('asdas')
     }
-    static hide() {
-        setTimeout(() => {
-            CustomAlert.myComponentInstance._hide()
-        }, 100);
-    }
-    _hide = () => {
-        this.setState({
-            visible: false,
-        })
+    confirm = (callfunction) => {
+        this.show()
+        this.setState(
+            {
+                callfunction: callfunction
+            }
+        )
     }
 
-    _show = (text, onPressOk, onPressCancel) => {
-        console.log('show')
-        // setTimeout(
-        this.setState({
-            visible: true,
-            onPressOk: onPressOk,
-            onPressCancel: onPressCancel,
-            text
-        })
-        CustomAlert.render()
-        // , 100)
-    }
-
-    componentWillUnmount() {
-        console.log('hide')
-
-        setTimeout(() => {
-            this._hide()
-        }, 100);
-    }
     render() {
         // console.log('visible', this.state.visible)
         if (this.state.visible) {
             return (
-                < AwesomeAlert
+                <AwesomeAlert
                     show={this.state.visible}
                     showProgress={false}
                     title="AwesomeAlert"
@@ -73,8 +44,8 @@ export default class CustomAlert extends Component {
                     cancelText="No, cancel"
                     confirmText="Yes, delete it"
                     confirmButtonColor="#DD6B55"
-                    onCancelPressed={this.state.onPressOk}
-                    onConfirmPressed={this.state.onPressCancel || this._hide}
+                    onCancelPressed={this.hide}
+                    onConfirmPressed={this.state.callfunction}
                     contentContainerStyle={{ backgroundColor: '#ffff34', }
                     }
                     titleStyle={{ color: 'black' }}

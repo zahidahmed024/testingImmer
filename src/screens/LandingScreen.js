@@ -5,6 +5,7 @@ import { get, post } from '../api/apicaller'
 import { fetchPosts, addPost, update, deletePost } from '../store/postStore'
 import { useSelector, useDispatch } from 'react-redux'
 import CustomAlert from '../navigation/CustomAlert';
+import { AlertHelper } from '../navigation/AlertHelper';
 
 export default function LandingScreen({ navigation }) {
     // const postStore = useStoreState((state) => console.log(state));
@@ -35,11 +36,21 @@ export default function LandingScreen({ navigation }) {
             <Button
                 title="alert show"
                 onPress={() => {
+                    // AlertHelper.show()
+                    AlertHelper.confirm(() => { alert('halllo') })
+                    // new CustomAlert()
+                    //  console.log( CustomAlert.show())
+                    // CustomAlert.show('I have a message for you! asdasd asd asd as das dasd asd asd asd asd asd asd asd asd asd ', () => alert('hoise'), () => CustomAlert.hide())
+                }}
+            />
+            {/* <Button
+                title="alert show"
+                onPress={() => {
                     // new CustomAlert()
                     //  console.log( CustomAlert.show())
                     CustomAlert.show('I have a message for you! asdasd asd asd as das dasd asd asd asd asd asd asd asd asd asd ', () => alert('hoise'), () => CustomAlert.hide())
                 }}
-            />
+            /> */}
             <Button
                 title="CameraTest"
                 onPress={() => navigation.navigate('CameraTest')}

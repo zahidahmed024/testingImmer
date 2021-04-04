@@ -9,8 +9,10 @@ import SetState from '../screens/SetState'
 import { StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import CustomAlert from './CustomAlert';
-const MainNavigator = createStackNavigator();
+import { AlertHelper } from './AlertHelper';
 
+
+const MainNavigator = createStackNavigator();
 const AppNavigator = () => (
     <SafeAreaProvider>
         <NavigationContainer>
@@ -40,7 +42,7 @@ const AppNavigator = () => (
                 />
             </MainNavigator.Navigator>
         </NavigationContainer>
-        <CustomAlert />
+        <CustomAlert ref={ref => AlertHelper.setDropDown(ref)} />
     </SafeAreaProvider>
 );
 
